@@ -3,7 +3,7 @@
 //  CureMantra
 //
 //  Created by Ayan Chakraborty on 31/10/19.
-//  Copyright © 2019 Debasish Bouri. All rights reserved.
+//  Copyright © 2019 Ayan Chakraborty. All rights reserved.
 //
 
 import UIKit
@@ -64,10 +64,16 @@ extension RunningActivity {
                 view.frame = window.bounds
                 window.addSubview(view)
                 window.bringSubviewToFront(view)
+            }else{
+                if let app = UIApplication.shared.connectedScenes
+                    .first!.delegate as? SceneDelegate, let window = app.window {
+                    view.frame = window.bounds
+                    window.addSubview(view)
+                    window.bringSubviewToFront(view) }
             }
         }
         return view as! RunningActivity
-
+        
     }
     
     class func dismiss(){
@@ -76,6 +82,14 @@ extension RunningActivity {
                 if let views = window.viewWithTag(09815){
                     views.removeFromSuperview()
                 }
+            }else{
+                if let app = UIApplication.shared.connectedScenes
+                    .first!.delegate as? SceneDelegate, let window = app.window {
+                    if let views = window.viewWithTag(09815){
+                        views.removeFromSuperview()
+                    }
+                }
+                
             }
         }
     }
@@ -88,8 +102,3 @@ extension RunningActivity {
 }
 
 
-extension UIView {
-    class func initFromNib<T: UIView>() -> T {
-        return Bundle.main.loadNibNamed(String(describing: self), owner: nil, options: nil)?[0] as! T
-    }
-}

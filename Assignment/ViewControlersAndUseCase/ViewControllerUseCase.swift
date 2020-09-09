@@ -10,6 +10,7 @@ import Foundation
 
 protocol ViewControllerDelegate: NSObjectProtocol {
     func updateItems(list: [Item])
+    func showError(str: String)
 }
 
 class ViewControllerUseCase {
@@ -24,6 +25,7 @@ class ViewControllerUseCase {
     
     func fetchData(){
         if self.offset <= totalPages {
+            RunningActivity.show()
             APIService.share.request(url: BaseURL,
                                      header: RequestHeader(authToken: AuthToken,
                                                            userId: "63",
@@ -32,13 +34,23 @@ class ViewControllerUseCase {
                                      payLoad: RequestBody(branchId: 1, page: self.offset),
                                      expectedModel: ResponseModel.self) { (resp, err) in
                                         DispatchQueue.main.async {
-                                            self.totalPages = resp?.response?.numberOfPages ?? 0
-                                            if let items = resp?.response?.items {
-                                                self.offset = self.offset + 1
-                                                self.delegate?.updateItems(list: items)
+                                            RunningActivity.dismiss()
+                                            if resp != nil {
+                                                self.totalPages = resp?.response?.numberOfPages ?? 0
+                                                if let items = resp?.response?.items {
+                                                    self.offset = self.offset + 1
+                                                    self.delegate?.updateItems(list: items)
+                                                    
+                                                }
+                                            }else{
+                                                self.delegate?.showError(str: StrAny(err))
                                             }
                                         }
             }
         }
+    }
+    
+    deinit {
+        print("End: \(self)")
     }
 }

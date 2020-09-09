@@ -19,13 +19,12 @@ class Cell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-         img.layer.cornerRadius = 8
-         infoLabel1.layer.cornerRadius = 4
-         infoLabel1.layer.masksToBounds = true
+        img.layer.cornerRadius = 8
+        infoLabel1.layer.cornerRadius = 4
+        infoLabel1.layer.masksToBounds = true
         infoLabel2.layer.cornerRadius = 4
         infoLabel2.layer.masksToBounds = true
-         
-       
+        
     }
     
     var data: Item? {
@@ -73,6 +72,12 @@ extension ViewController: ViewControllerDelegate{
             }
             self.tableView?.reloadData()
         }
+    }
+    
+    func showError(str: String) {
+        let alert = UIAlertController(title: "Error", message: str, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
 }
